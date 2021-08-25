@@ -1,0 +1,7 @@
+python-telegram-bot
+matplotlib
+mplfinance
+pyssml
+oauth2client
+PyOpenSSL
+pymongo
