@@ -67,6 +67,10 @@ def total_chart(time, prices, user_name, list_coins):
 
         c_val = prices[cid]
 
+        tmp_list = [candle_price for candle_prices in c_val for candle_price in candle_prices]
+        max_value = max(tmp_list)
+        min_value = min(tmp_list)
+
         data_number = min(len(data_time), len(c_val))
         if data_number < max_length:
             result_data_time = data_time[-data_number:]
@@ -85,14 +89,15 @@ def total_chart(time, prices, user_name, list_coins):
         candlestick_ohlc(ax2, dohlc, width=0.5, colorup='r', colordown='b')
 
         yticks = list(ax2.get_yticks()) ## y축 눈금을 가져온다.
-        xticks = list(ax2.get_xticks()) ## y축 눈금을 가져온다.
+        xticks = list(ax2.get_xticks()) ## x축 눈금을 가져온다.
         result_str += f"{cid.upper()} : ${ohlc[len(ohlc)-1][3]}\n"
 
         for y in yticks:
             ax2.axhline(y,linestyle=(0,(5,2)),color='grey',alpha=0.5) ## 눈금선 생성
 
-        ax2.text(xticks[len(xticks)-2], yticks[len(yticks)-1],f'{dohlc[len(dohlc)-1][4]}',fontsize=15, ha='center', bbox=bbox) ## 선 그래프 텍스트\
-    
+        ax2.text(xticks[len(xticks)-2], yticks[len(yticks)-1],f'{dohlc[len(dohlc)-1][4]}',fontsize=15, ha='center', bbox=bbox) ## 선 그래프 텍스트
+        ax2.text(-2, yticks[len(yticks)-1],f'H : {max_value}\nL : {min_value}',fontsize=12, ha='left', bbox=bbox) ## 선 그래프 텍스트
+        
         for i in range(len(result_data_time)):
             if i % 6 != 0:
                 result_data_time[i] = ""
