@@ -143,10 +143,11 @@ def draw_chart(user_name, coin_name):
                     prices_candle_dict[k].append(data[k][0])
                     close_prices_dict[k].append(data[k][0][3])
         try:
-            if coin_name != "total":
-                list_coins = [coin_name]
+            if "total" not in coin_name:
+                list_coins = coin_name
             else:
                 list_coins = ['klay'] + [c for c in kwlps.keys()]
+                list_coins.remove("ksp")
             
             price_data_str = total_chart(time_list, prices_candle_dict, user_name, list_coins)
         except:
@@ -171,7 +172,7 @@ def show_chart(update, ctx):
     else:
         coin_name = "total"
 
-    data_checker, result_msg = draw_chart(user_name, coin_name)
+    data_checker, result_msg = draw_chart(user_name, [coin_name])
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -185,7 +186,7 @@ def show_klay_chart(update, ctx):
     result_msg : str = ""
     user_name = update.message.from_user["username"]
 
-    data_checker, result_msg = draw_chart(user_name, "klay")
+    data_checker, result_msg = draw_chart(user_name, ["klay", "aklay"])
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -199,7 +200,7 @@ def show_ksp_chart(update, ctx):
     result_msg : str = ""
     user_name = update.message.from_user["username"]
 
-    data_checker, result_msg = draw_chart(user_name, "ksp")
+    data_checker, result_msg = draw_chart(user_name, ["klay", "ksp"])
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -213,7 +214,7 @@ def show_skai_chart(update, ctx):
     result_msg : str = ""
     user_name = update.message.from_user["username"]
 
-    data_checker, result_msg = draw_chart(user_name, "skai")
+    data_checker, result_msg = draw_chart(user_name, ["skai"])
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -227,7 +228,7 @@ def show_kfi_chart(update, ctx):
     result_msg : str = ""
     user_name = update.message.from_user["username"]
 
-    data_checker, result_msg = draw_chart(user_name, "kfi")
+    data_checker, result_msg = draw_chart(user_name, ["kfi"])
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -241,7 +242,7 @@ def show_house_chart(update, ctx):
     result_msg : str = ""
     user_name = update.message.from_user["username"]
 
-    data_checker, result_msg = draw_chart(user_name, "house")
+    data_checker, result_msg = draw_chart(user_name, ["house"])
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
