@@ -97,7 +97,7 @@ def total_chart(time, prices, user_name, list_coins, title):
             ax2.axhline(y,linestyle=(0,(5,2)),color='grey',alpha=0.5) ## 눈금선 생성
 
         ax2.text(xticks[len(xticks)-2], yticks[len(yticks)-1],f'{dohlc[len(dohlc)-1][4]}',fontsize=15, ha='center', bbox=bbox) ## 선 그래프 텍스트
-        ax2.text(-2, yticks[len(yticks)-1],f'H : {max_value}\nL : {min_value}',fontsize=12, ha='left', bbox=bbox) ## 선 그래프 텍스트
+        ax2.text(0, yticks[len(yticks)-1],f'H : {max_value}\nL : {min_value}',fontsize=12, ha='left', bbox=bbox) ## 선 그래프 텍스트
         
         for i in range(len(result_data_time)):
             if i % 6 != 0:
