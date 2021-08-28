@@ -6,7 +6,7 @@ from mplfinance.original_flavor import candlestick_ohlc
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import ScalarFormatter
-import datetime, time
+import datetime, re
 from pymongo import MongoClient
 import pymongo, ssl
 
@@ -26,6 +26,7 @@ kwlps : dict = {}
 time_list : list = []
 close_prices_dict : dict = {"klay":[]}
 prices_candle_dict : dict = {"klay":[]}
+candle_time_db_dict : dict = {"5":None, "15":None, "1":None, "4":None}
 
 for i, name in enumerate(token_name_list):
     kwlps[name] = token_hash_list[i]
@@ -50,7 +51,7 @@ bbox = dict( ## 텍스트 박스 스타일 지정
     facecolor='white', # 박스 배경색
 )
 
-def total_chart(time, prices, user_name, list_coins):
+def total_chart(time, prices, user_name, list_coins, title):
     result_str : str = ""
     n_rows = len(list_coins)
     fig, axes = plt.subplots(n_rows, 1, figsize=(4*fig_scale, n_rows*fig_scale), dpi=50)
@@ -111,7 +112,7 @@ def total_chart(time, prices, user_name, list_coins):
         ax2.yaxis.set_major_formatter(ScalarFormatter(useOffset=False))
         ax2.axes.xaxis.set_visible(False)
         ax2.axes.yaxis.set_visible(False)
-        ax2.set_title(f'{cid.upper()}/USDT',fontsize=20)
+        ax2.set_title(f'{cid.upper()}/USDT ({title})',fontsize=20)
 
         ax.spines['right'].set_visible(False) ## 오른쪽 축 숨김
         ax.spines['top'].set_visible(False) ## 위쪽 축 숨김
@@ -127,13 +128,12 @@ def total_chart(time, prices, user_name, list_coins):
 
     return result_str
 
-def draw_chart(user_name, coin_name):
-    global price_db
+def draw_chart(db, user_name, coin_name, title):
     global time_list
     global prices_candle_dict
     global close_prices_dict
     
-    price_documents = list(price_db.coin.price.find().sort([("_id",-1)]).limit(min(max_length, price_db.coin.price.count_documents({}))))
+    price_documents = list(db.find().sort([("_id",-1)]).limit(min(max_length, db.count_documents({}))))
     result_documents = list(reversed(price_documents))
     if len(result_documents) >= 2:
         for data in result_documents:
@@ -149,7 +149,7 @@ def draw_chart(user_name, coin_name):
                 list_coins = ['klay'] + [c for c in kwlps.keys()]
                 list_coins.remove("ksp")
             
-            price_data_str = total_chart(time_list, prices_candle_dict, user_name, list_coins)
+            price_data_str = total_chart(time_list, prices_candle_dict, user_name, list_coins, title)
         except:
             return False, f"에러 발생..."
     else:
@@ -162,17 +162,39 @@ def draw_chart(user_name, coin_name):
 
     return True, price_data_str
 
+def input_checker(input_msg, db_dict):
+    user_name : str = ""
+    result_db = None
+    interval_time : str = ""
+    input_msg_list : list = []
+    
+    user_name = input_msg.from_user["username"]
+    input_msg_list = input_msg.text.split(" ")
+
+    if len(input_msg_list) > 1:
+        if input_msg_list[1] not in db_dict.keys():
+            return False,  user_name, result_db, interval_time
+        result_db = db_dict[input_msg_list[1]][0]
+        interval_time = db_dict[input_msg_list[1]][1]
+    else:
+        result_db = db_dict["5"][0]
+        interval_time = db_dict["5"][1]
+    
+    return True,  user_name, result_db, interval_time
+
+
 def show_chart(update, ctx):
+    db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
-    user_name = update.message.from_user["username"]
-    input_msg = update.message.text.split(" ")
-    if len(input_msg) > 1:
-        coin_name = input_msg[1]
-    else:
-        coin_name = "total"
+    interval_str : str = ""
 
-    data_checker, result_msg = draw_chart(user_name, [coin_name])
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["total"], interval_str)
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -182,11 +204,46 @@ def show_chart(update, ctx):
     return
 
 def show_klay_chart(update, ctx):
+    db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
-    user_name = update.message.from_user["username"]
+    interval_str : str = ""
 
-    data_checker, result_msg = draw_chart(user_name, ["klay", "aklay"])
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay", "ksp"], interval_str)
+
+    if data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+    else:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)    
+    return
+
+def show_aklay_chart(update, ctx):
+    db_checker : bool = True
+    data_checker : bool = True
+    result_msg : str = ""
+    interval_str : str = ""
+
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay"], interval_str)
+    cal_ratio = result_msg.split("\n")
+    price_ratio : float = 0.0
+    price_list : list = []
+    for price_value in cal_ratio:
+        if price_value.find("$") != -1:
+            price_list.append(price_value[price_value.find("$")+1:])
+    price_ratio = round(float(price_list[0])/float(price_list[1]), 5)
+
+    result_msg += f"\n1 Klay ≈ {price_ratio} aKlay"
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -196,11 +253,17 @@ def show_klay_chart(update, ctx):
     return
 
 def show_ksp_chart(update, ctx):
+    db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
-    user_name = update.message.from_user["username"]
+    interval_str : str = ""
 
-    data_checker, result_msg = draw_chart(user_name, ["klay", "ksp"])
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "ksp"], interval_str)
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -210,11 +273,17 @@ def show_ksp_chart(update, ctx):
     return
 
 def show_skai_chart(update, ctx):
+    db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
-    user_name = update.message.from_user["username"]
+    interval_str : str = ""
 
-    data_checker, result_msg = draw_chart(user_name, ["skai"])
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["skai"], interval_str)
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -224,11 +293,17 @@ def show_skai_chart(update, ctx):
     return
 
 def show_kfi_chart(update, ctx):
+    db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
-    user_name = update.message.from_user["username"]
+    interval_str : str = ""
 
-    data_checker, result_msg = draw_chart(user_name, ["kfi"])
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["kfi"], interval_str)
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -238,11 +313,17 @@ def show_kfi_chart(update, ctx):
     return
 
 def show_house_chart(update, ctx):
+    db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
-    user_name = update.message.from_user["username"]
+    interval_str : str = ""
 
-    data_checker, result_msg = draw_chart(user_name, ["house"])
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["house"], interval_str)
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -252,13 +333,14 @@ def show_house_chart(update, ctx):
     return
 
 def spon_link(update, ctx):
-    ctx.bot.send_message(chat_id=update.message.chat_id, text="1파이도 감사히 받습니다!\n받은 후원금은 서버 운영비 및 개발자 치킨 사먹는데 쓰입니다.")  
+    ctx.bot.send_message(chat_id=update.message.chat_id, text="1클파이도 감사히 받습니다!\n받은 후원금은 서버 운영비 및 개발자 치킨 사먹는데 쓰입니다.")  
     ctx.bot.send_message(chat_id=update.message.chat_id, text="0x5657CeC0a50089Ac4cb698c71319DC56ab5C866a")    
 
 def main():
     global price_db
     global time_list
     global prices_candle_dict
+    global candle_time_db_dict
 
     try:
         price_db = MongoClient(ssl=True, ssl_cert_reqs=ssl.CERT_NONE, **mongoDB_connect_info)
@@ -271,12 +353,15 @@ def main():
     except:
         print(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\ndb 연결 실패! 오류 발생:")
 
+    candle_time_db_dict = {"5":[price_db.coin.price, "5m"], "15":[price_db.coin.price_fifteen, "15m"], "1":[price_db.coin.price_hour, "1h"], "4":[price_db.coin.price_four_hour, "4h"]}
+
     updater = Updater(token)
     dp = updater.dispatcher
     print("Bot Started")
 
     dp.add_handler(CommandHandler(["c", "C", "chart", "Chart", "CHART"], show_chart))
     dp.add_handler(CommandHandler(["k", "K", "klay", "Klay", "KLAY"], show_klay_chart))
+    dp.add_handler(CommandHandler(["a", "A", "aklay", "Aklay", "AKLAY"], show_aklay_chart))
     dp.add_handler(CommandHandler(["p", "P", "ksp", "Ksp", "KSP"], show_ksp_chart))
     dp.add_handler(CommandHandler(["s", "S", "skai", "Skai", "SKAI", "sKai"], show_skai_chart))
     dp.add_handler(CommandHandler(["f", "F", "kfi", "Kfi", "KFI"], show_kfi_chart))
