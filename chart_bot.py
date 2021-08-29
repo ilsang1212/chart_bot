@@ -148,6 +148,7 @@ def draw_chart(db, user_name, coin_name, title):
             else:
                 list_coins = ['klay'] + [c for c in kwlps.keys()]
                 list_coins.remove("ksp")
+                list_coins.remove("vkai")
             
             price_data_str = total_chart(time_list, prices_candle_dict, user_name, list_coins, title)
         except:
@@ -283,7 +284,7 @@ def show_skai_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["skai"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["skai", "vkai"], interval_str)
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
