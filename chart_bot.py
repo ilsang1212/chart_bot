@@ -270,6 +270,8 @@ def show_ksp_chart(update, ctx):
         return
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "ksp"], interval_str)
+    
+    result_msg = display_price_ratio(result_msg, "Klay", "Ksp")
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
