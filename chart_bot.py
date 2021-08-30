@@ -183,6 +183,18 @@ def input_checker(input_msg, db_dict):
     
     return True,  user_name, result_db, interval_time
 
+def display_price_ratio(msg : str, a_token_name, b_token_name):
+    result : str = ""
+    cal_ratio = msg.split("\n")
+    price_ratio : float = 0.0
+    price_list : list = []
+    for price_value in cal_ratio:
+        if price_value.find("$") != -1:
+            price_list.append(price_value[price_value.find("$")+1:])
+    price_ratio = round(float(price_list[0])/float(price_list[1]), 5)
+
+    result = f"{msg}\n1 {a_token_name} ≈ {price_ratio} {b_token_name}"
+    return result
 
 def show_chart(update, ctx):
     db_checker : bool = True
@@ -236,15 +248,8 @@ def show_aklay_chart(update, ctx):
         return
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay"], interval_str)
-    cal_ratio = result_msg.split("\n")
-    price_ratio : float = 0.0
-    price_list : list = []
-    for price_value in cal_ratio:
-        if price_value.find("$") != -1:
-            price_list.append(price_value[price_value.find("$")+1:])
-    price_ratio = round(float(price_list[0])/float(price_list[1]), 5)
 
-    result_msg += f"\n1 Klay ≈ {price_ratio} aKlay"
+    result_msg = display_price_ratio(result_msg, "Klay", "aKlay")
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -286,6 +291,8 @@ def show_skai_chart(update, ctx):
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["skai", "vkai"], interval_str)
 
+    result_msg = display_price_ratio(result_msg, "sKai", "vKai")
+
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
@@ -304,7 +311,9 @@ def show_kfi_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["kfi"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "kfi"], interval_str)
+
+    result_msg = display_price_ratio(result_msg, "Klay", "Kfi")
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
