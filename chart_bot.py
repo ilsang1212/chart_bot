@@ -200,6 +200,7 @@ def display_price_ratio(msg : str, a_token_name, b_token_name):
 def show_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -222,6 +223,7 @@ def show_chart(update, ctx):
 def show_klay_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -244,6 +246,7 @@ def show_klay_chart(update, ctx):
 def show_aklay_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -268,6 +271,7 @@ def show_aklay_chart(update, ctx):
 def show_ksp_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -292,6 +296,7 @@ def show_ksp_chart(update, ctx):
 def show_skai_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -316,6 +321,7 @@ def show_skai_chart(update, ctx):
 def show_kfi_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -340,6 +346,7 @@ def show_kfi_chart(update, ctx):
 def show_house_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -362,6 +369,7 @@ def show_house_chart(update, ctx):
 def show_orca_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
