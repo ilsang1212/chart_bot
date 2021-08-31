@@ -14,6 +14,7 @@ token = os.environ["BOT_TOKEN"]
 token_name_list : list = os.environ["TOKEN_NAME"].split(" ")
 token_hash_list : list = os.environ["TOKEN_HASH"].split(" ")
 max_length : int = int(os.environ["MAX_LENGTH"])
+chat_id_list : list = os.environ["CHAT_ID_LIST"].split(" ")
 
 mongoDB_connect_info : dict = {
     "host" : os.environ["mongoDB_HOST"],
@@ -197,6 +198,8 @@ def display_price_ratio(msg : str, a_token_name, b_token_name):
     return result
 
 def show_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -217,6 +220,8 @@ def show_chart(update, ctx):
     return
 
 def show_klay_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -237,6 +242,8 @@ def show_klay_chart(update, ctx):
     return
 
 def show_aklay_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -259,6 +266,8 @@ def show_aklay_chart(update, ctx):
     return
 
 def show_ksp_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -281,6 +290,8 @@ def show_ksp_chart(update, ctx):
     return
 
 def show_skai_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -303,6 +314,8 @@ def show_skai_chart(update, ctx):
     return
 
 def show_kfi_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -325,6 +338,8 @@ def show_kfi_chart(update, ctx):
     return
 
 def show_house_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
@@ -345,6 +360,8 @@ def show_house_chart(update, ctx):
     return
 
 def show_orca_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
     db_checker : bool = True
     data_checker : bool = True
     result_msg : str = ""
