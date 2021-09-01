@@ -352,7 +352,9 @@ def show_house_chart(update, ctx):
     result_msg : str = ""
     interval_str : str = ""
 
-    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "house"], interval_str)
+
+    result_msg = display_price_ratio(result_msg, "Klay", "House")
 
     if not db_checker:
         return
