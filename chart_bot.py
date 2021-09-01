@@ -351,15 +351,15 @@ def show_house_chart(update, ctx):
     data_checker : bool = True
     result_msg : str = ""
     interval_str : str = ""
-
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "house"], interval_str)
-
-    result_msg = display_price_ratio(result_msg, "Klay", "House")
+                
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
 
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["house"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "house"], interval_str)
+
+    result_msg = display_price_ratio(result_msg, "Klay", "House")
 
     if data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
