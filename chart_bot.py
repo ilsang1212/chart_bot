@@ -148,8 +148,9 @@ def draw_chart(db, user_name, coin_name, title):
                 list_coins = coin_name
             else:
                 list_coins = ['klay'] + [c for c in kwlps.keys()]
-                list_coins.remove("ksp")
-                list_coins.remove("vkai")
+                remove_coin_list = ["ksp", "vkai", "kdai", "kai"]
+                for coin_name in remove_coin_list:
+                    list_coins.remove(coin_list)
             
             price_data_str = total_chart(time_list, prices_candle_dict, user_name, list_coins, title)
         except:
