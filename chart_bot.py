@@ -15,6 +15,7 @@ token_name_list : list = os.environ["TOKEN_NAME"].split(" ")
 token_hash_list : list = os.environ["TOKEN_HASH"].split(" ")
 max_length : int = int(os.environ["MAX_LENGTH"])
 chat_id_list : list = os.environ["CHAT_ID_LIST"].split(" ")
+fig_scale : int = int(os.environ["FIG_SCALE"])
 
 mongoDB_connect_info : dict = {
     "host" : os.environ["mongoDB_HOST"],
@@ -35,9 +36,6 @@ for i, name in enumerate(token_name_list):
 for k in kwlps.keys():
     close_prices_dict[k] = []
     prices_candle_dict[k] = []
-
-# Figure 크기 이상하면 여기 수치 조정하세요.
-fig_scale = 3
 
 config_plot = dict( ## 키워드 인자
     color='#7CFC00', # 선 색깔
