@@ -28,7 +28,7 @@ kwlps : dict = {}
 time_list : list = []
 close_prices_dict : dict = {"klay":[]}
 prices_candle_dict : dict = {"klay":[]}
-candle_time_db_dict : dict = {"5":None, "15":None, "1":None, "4":None}
+candle_time_db_dict : dict = {"5":None, "15":None, "1":None, "4":None, "d":None}
 
 for i, name in enumerate(token_name_list):
     kwlps[name] = token_hash_list[i]
@@ -411,7 +411,7 @@ def main():
     except:
         print(f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\ndb 연결 실패! 오류 발생:")
 
-    candle_time_db_dict = {"5":[price_db.coin.price, "5m"], "15":[price_db.coin.price_fifteen, "15m"], "1":[price_db.coin.price_hour, "1h"], "4":[price_db.coin.price_four_hour, "4h"]}
+    candle_time_db_dict = {"5":[price_db.coin.price, "5m"], "15":[price_db.coin.price_fifteen, "15m"], "1":[price_db.coin.price_hour, "1h"], "4":[price_db.coin.price_four_hour, "4h"], "d":[price_db.coin.price_day, "1Day"]}
 
     updater = Updater(token)
     dp = updater.dispatcher
