@@ -53,7 +53,7 @@ bbox = dict( ## 텍스트 박스 스타일 지정
 def total_chart(time, prices, user_name, list_coins, title):
     result_str : str = ""
     n_rows = len(list_coins)
-    fig, axes = plt.subplots(n_rows, 1, figsize=(4*fig_scale, n_rows*fig_scale), dpi=100)
+    fig, axes = plt.subplots(n_rows, 1, figsize=(4*fig_scale, n_rows*fig_scale), dpi=150)
     if n_rows != 1:
         axes = axes.flatten()
     else:
@@ -212,11 +212,13 @@ def show_chart(update, ctx):
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["total"], interval_str)
 
-    if data_checker:
+    if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
-    else:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)    
+        return
+
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
     return
 
 def show_klay_chart(update, ctx):
@@ -235,11 +237,13 @@ def show_klay_chart(update, ctx):
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay", "ksp"], interval_str)
 
-    if data_checker:
+    if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
-    else:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)    
+        return
+
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
     return
 
 def show_aklay_chart(update, ctx):
@@ -258,13 +262,15 @@ def show_aklay_chart(update, ctx):
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay"], interval_str)
 
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+
     result_msg = display_price_ratio(result_msg, "Klay", "aKlay")
 
-    if data_checker:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
-    else:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)    
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
     return
 
 def show_ksp_chart(update, ctx):
@@ -282,14 +288,16 @@ def show_ksp_chart(update, ctx):
         return
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "ksp"], interval_str)
+
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
     
     result_msg = display_price_ratio(result_msg, "Klay", "Ksp")
 
-    if data_checker:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
-    else:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)    
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
     return
 
 def show_skai_chart(update, ctx):
@@ -308,13 +316,15 @@ def show_skai_chart(update, ctx):
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["skai", "vkai", "kai"], interval_str)
 
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+
     result_msg = display_price_ratio(result_msg, "sKai", "vKai")
 
-    if data_checker:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
-    else:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)    
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
     return
 
 def show_kfi_chart(update, ctx):
@@ -333,13 +343,15 @@ def show_kfi_chart(update, ctx):
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "kfi"], interval_str)
 
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+
     result_msg = display_price_ratio(result_msg, "Klay", "Kfi")
 
-    if data_checker:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
-    else:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)    
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
     return
 
 def show_house_chart(update, ctx):
@@ -358,13 +370,15 @@ def show_house_chart(update, ctx):
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "house"], interval_str)
 
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+
     result_msg = display_price_ratio(result_msg, "Klay", "House")
 
-    if data_checker:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
-    else:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)    
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+            
     return
 
 def show_orca_chart(update, ctx):
@@ -383,11 +397,14 @@ def show_orca_chart(update, ctx):
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["orca"], interval_str)
 
-    if data_checker:
+
+    if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
-    else:
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)    
+        return
+
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
     return
 
 def spon_link(update, ctx):
