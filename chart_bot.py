@@ -53,7 +53,7 @@ bbox = dict( ## 텍스트 박스 스타일 지정
 def total_chart(time, prices, user_name, list_coins, title):
     result_str : str = ""
     n_rows = len(list_coins)
-    fig, axes = plt.subplots(n_rows, 1, figsize=(4*fig_scale, n_rows*fig_scale), dpi=50)
+    fig, axes = plt.subplots(n_rows, 1, figsize=(4*fig_scale, n_rows*fig_scale), dpi=100)
     if n_rows != 1:
         axes = axes.flatten()
     else:
