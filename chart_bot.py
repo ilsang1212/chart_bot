@@ -146,7 +146,7 @@ def draw_chart(db, user_name, coin_name, title):
                 list_coins = coin_name
             else:
                 list_coins = ['klay'] + [c for c in kwlps.keys()]
-                remove_coin_list = ["orca", "vkai", "kdai", "kai"]
+                remove_coin_list = ["orca", "vkai", "kdai", "kai", "wood"]
                 for coin_name in remove_coin_list:
                     list_coins.remove(coin_name)
             
@@ -368,7 +368,7 @@ def show_house_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "house"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "house", "wood"], interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -396,7 +396,6 @@ def show_orca_chart(update, ctx):
         return
 
     data_checker, result_msg = draw_chart(data_db, user_name, ["orca"], interval_str)
-
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
