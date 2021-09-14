@@ -187,13 +187,13 @@ def display_price_ratio(msg : str, a_token_name, b_token_name):
     result : str = ""
     cal_ratio = msg.split("\n")
     price_ratio : float = 0.0
-    price_list : list = []
+    price_dict : dict = {a_token_name : None, b_token_name: None}
     for price_value in cal_ratio:
         if price_value.find(f"{a_token_name.upper()} : $") != -1:
-            price_list.append(price_value[price_value.find("$")+1:])
+            price_dict[a_token_name] = price_value[price_value.find("$")+1:]
         if price_value.find(f"{b_token_name.upper()} : $") != -1:
-            price_list.append(price_value[price_value.find("$")+1:])
-    price_ratio = round(float(price_list[0])/float(price_list[1]), 5)
+            price_dict[b_token_name] = price_value[price_value.find("$")+1:]
+    price_ratio = round(float(price_dict[a_token_name])/float(price_dict[b_token_name]), 5)
 
     result = f"{msg}\n1 {a_token_name} ≈ {price_ratio} {b_token_name}"
     return result
