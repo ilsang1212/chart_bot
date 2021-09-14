@@ -189,7 +189,9 @@ def display_price_ratio(msg : str, a_token_name, b_token_name):
     price_ratio : float = 0.0
     price_list : list = []
     for price_value in cal_ratio:
-        if price_value.find("$") != -1:
+        if price_value.find(f"{a_token_name.upper()} : $") != -1:
+            price_list.append(price_value[price_value.find("$")+1:])
+        if price_value.find(f"{b_token_name.upper()} : $") != -1:
             price_list.append(price_value[price_value.find("$")+1:])
     price_ratio = round(float(price_list[0])/float(price_list[1]), 5)
 
@@ -375,6 +377,7 @@ def show_house_chart(update, ctx):
         return
 
     result_msg = display_price_ratio(result_msg, "Klay", "House")
+    result_msg = display_price_ratio(result_msg, "House", "Wood")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
