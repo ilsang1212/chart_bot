@@ -370,14 +370,15 @@ def show_house_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "house", "wood"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay", "house", "wood"], interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
 
     result_msg = display_price_ratio(result_msg, "Klay", "House")
-    result_msg = display_price_ratio(result_msg, "House", "Wood")
+    result_msg = display_price_ratio(result_msg, "aKlay", "House")
+    result_msg = display_price_ratio(result_msg, "Wood", "House")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
