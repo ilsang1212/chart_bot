@@ -431,9 +431,9 @@ def show_ks_chart(update, ctx):
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
 
-    result_msg = display_price_ratio(result_msg, "kscoinbase", "kai")
-    result_msg = display_price_ratio(result_msg, "ksdunamu", "kai")
-    result_msg = display_price_ratio(result_msg, "ksyanolja", "kai")
+    result_msg = display_price_ratio(result_msg, "ksCOINBASE", "kai")
+    result_msg = display_price_ratio(result_msg, "ksDUNAMU", "kai")
+    result_msg = display_price_ratio(result_msg, "ksYANOLJA", "kai")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
