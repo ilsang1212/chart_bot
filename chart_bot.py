@@ -16,7 +16,7 @@ token_hash_list : list = os.environ["TOKEN_HASH"].split(" ")
 max_length : int = int(os.environ["MAX_LENGTH"])
 chat_id_list : list = os.environ["CHAT_ID_LIST"].split(" ")
 fig_scale : int = int(os.environ["FIG_SCALE"])
-except_list : list = list(os.environ["EXCEPT_LIST"]).split(" ")
+except_list : list = os.environ["EXCEPT_LIST"].split(" ")
 
 mongoDB_connect_info : dict = {
     "host" : os.environ["mongoDB_HOST"],
