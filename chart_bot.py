@@ -16,6 +16,7 @@ token_hash_list : list = os.environ["TOKEN_HASH"].split(" ")
 max_length : int = int(os.environ["MAX_LENGTH"])
 chat_id_list : list = os.environ["CHAT_ID_LIST"].split(" ")
 fig_scale : int = int(os.environ["FIG_SCALE"])
+except_list : list = list(os.environ["EXCEPT_LIST"]).split(" ")
 
 mongoDB_connect_info : dict = {
     "host" : os.environ["mongoDB_HOST"],
@@ -146,8 +147,8 @@ def draw_chart(db, user_name, coin_name, title):
                 list_coins = coin_name
             else:
                 list_coins = ['klay'] + [c for c in kwlps.keys()]
-                remove_coin_list = ["orca", "vkai", "kdai", "kai", "wood", "kscoinbase", "ksdunamu", "ksyanolja"]
-                for coin_name in remove_coin_list:
+                # remove_coin_list = ["orca", "vkai", "kdai", "kai", "wood", "kscoinbase", "ksdunamu", "ksyanolja"]
+                for coin_name in except_list:
                     list_coins.remove(coin_name)
             
             price_data_str = total_chart(time_list, prices_candle_dict, user_name, list_coins, title)
