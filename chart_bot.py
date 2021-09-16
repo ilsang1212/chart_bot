@@ -411,6 +411,35 @@ def show_orca_chart(update, ctx):
 
     return
 
+def show_ks_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
+    db_checker : bool = True
+    data_checker : bool = True
+    result_msg : str = ""
+    interval_str : str = ""
+                
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["kscoinbase", "ksdunamu", "ksyanolja", "kai"], interval_str)
+
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+
+    result_msg = display_price_ratio(result_msg, "kscoinbase", "kai")
+    result_msg = display_price_ratio(result_msg, "ksdunamu", "kai")
+    result_msg = display_price_ratio(result_msg, "ksyanolja", "kai")
+
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+            
+    return
+
 def spon_link(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text="1클파이도 감사히 받습니다!\n받은 후원금은 서버 운영비 및 개발자 치킨 사먹는데 쓰입니다.")  
     ctx.bot.send_message(chat_id=update.message.chat_id, text="0x5657CeC0a50089Ac4cb698c71319DC56ab5C866a")    
@@ -446,6 +475,7 @@ def main():
     dp.add_handler(CommandHandler(["f", "F", "kfi", "Kfi", "KFI"], show_kfi_chart))
     dp.add_handler(CommandHandler(["h", "H", "house", "House", "HOUSE"], show_house_chart))
     dp.add_handler(CommandHandler(["o", "O", "orca", "Orca", "ORCA"], show_orca_chart))
+    dp.add_handler(CommandHandler(["ks", "KS", "Ks", "kS"], show_ks_chart))
     dp.add_handler(CommandHandler(["spon", "sp"], spon_link))
     # dp.add_handler(MessageHandler(Filters.command, unknown))
 
