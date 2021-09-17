@@ -50,10 +50,74 @@ bbox = dict( ## 텍스트 박스 스타일 지정
     boxstyle='square', # 박스 모양
     facecolor='white', # 박스 배경색
 )
+def draw_ratio_chart(ax, prices, data_time, ratio_list:list):
+    c_val = prices[ratio_list[0]]
+    c_val1 = prices[ratio_list[1]]
 
-def total_chart(time, prices, user_name, list_coins, title):
+    data_number = min(len(data_time), len(c_val))
+    if data_number < max_length:
+        result_data_time = data_time[-data_number:]
+        result_c_val = c_val[-data_number:]
+        result_c_val1 = c_val1[-data_number:]
+    else:
+        result_data_time = data_time[-max_length:]
+        result_c_val = c_val[-max_length:]
+        result_c_val1 = c_val1[-max_length:]
+    
+    x = np.arange(len(result_data_time))
+    ohlc = result_c_val
+    ohlc1 = result_c_val1
+    dohlc = np.hstack((np.reshape(x, (-1, 1)), ohlc))
+    dohlc1 = np.hstack((np.reshape(x, (-1, 1)), ohlc1))
+    
+    dohlc[len(dohlc)-1][4]
+
+    ratio_list : list = []
+
+    for j in range(len(dohlc)):
+        ratio_list.append(round(dohlc[j][4]/dohlc1[j][4],5))
+
+    max_value = max(ratio_list)
+    min_value = min(ratio_list)
+    
+    config_plot1 = dict( ## 키워드 인자
+    color='#0000ff', # 선 색깔
+    linestyle='solid', # 선 스타일
+    linewidth=3, # 선 두께 
+    # marker='o', # 마커 모양
+    # markersize=5 # 마커 사이즈
+    )
+
+    ax.plot(ratio_list, **config_plot1)
+
+    yticks = list(ax.get_yticks()) ## y축 눈금을 가져온다.
+    xticks = list(ax.get_xticks()) ## x축 눈금을 가져온다.
+
+    for y in yticks:
+        ax.axhline(y,linestyle=(0,(5,2)),color='grey',alpha=0.5) ## 눈금선 생성
+
+    ax.text(xticks[len(xticks)-2], yticks[len(yticks)-1],f'{ratio_list[len(ratio_list)-1]}',fontsize=20, ha='center', bbox=bbox) ## 선 그래프 텍스트
+    ax.text(0, yticks[len(yticks)-1],f'H : {max_value}\nL : {min_value}',fontsize=18, ha='left', bbox=bbox) ## 선 그래프 텍스트
+
+    for time_j in range(len(result_data_time)):
+        if time_j % 6 != 0:
+            result_data_time[time_j] = ""
+
+    ax.spines['right'].set_visible(False) ## 오른쪽 축 숨김
+    ax.spines['top'].set_visible(False) ## 위쪽 축 숨김
+    ax.set_xticks(x)
+    ax.set_xticklabels(result_data_time, rotation=45)
+    ax.yaxis.set_major_formatter(ScalarFormatter(useOffset=False))
+    ax.set_title(f"{ratio_list[0]}/{ratio_list[1]} ratio",fontsize=20)
+
+    return ax
+
+def total_chart(time, prices, user_name, list_coins, title, ratio_chart : bool = False, ratio_list : list = None):
     result_str : str = ""
-    n_rows = len(list_coins)
+    if ratio_chart and ratio_list is not None:
+        n_rows = len(list_coins) + 1
+    else:
+        n_rows = len(list_coins)
     fig, axes = plt.subplots(n_rows, 1, figsize=(4*fig_scale, n_rows*fig_scale), dpi=150)
     if n_rows != 1:
         axes = axes.flatten()
@@ -63,9 +127,13 @@ def total_chart(time, prices, user_name, list_coins, title):
     data_time = time
     
     for i, ax in enumerate(axes):
-        cid = list_coins[i]
         ax.clear()
+        if ratio_chart and i == len(axes)-1:
+            ax = draw_ratio_chart(ax, prices, data_time, ratio_list)
+            plt.tight_layout()
+            continue
 
+        cid = list_coins[i]
         c_val = prices[cid]
 
         tmp_list = [candle_price for candle_prices in c_val for candle_price in candle_prices]
@@ -99,9 +167,9 @@ def total_chart(time, prices, user_name, list_coins, title):
         ax2.text(xticks[len(xticks)-2], yticks[len(yticks)-1],f'{dohlc[len(dohlc)-1][4]}',fontsize=20, ha='center', bbox=bbox) ## 선 그래프 텍스트
         ax2.text(0, yticks[len(yticks)-1],f'H : {max_value}\nL : {min_value}',fontsize=18, ha='left', bbox=bbox) ## 선 그래프 텍스트
         
-        for i in range(len(result_data_time)):
-            if i % 6 != 0:
-                result_data_time[i] = ""
+        for time_i in range(len(result_data_time)):
+            if time_i % 6 != 0:
+                result_data_time[time_i] = ""
 
         ax2.spines['right'].set_visible(False) ## 오른쪽 축 숨김
         ax2.spines['top'].set_visible(False) ## 위쪽 축 숨김
@@ -128,7 +196,7 @@ def total_chart(time, prices, user_name, list_coins, title):
 
     return result_str
 
-def draw_chart(db, user_name, coin_name, title):
+def draw_chart(db, user_name, coin_name, title, ratio_chart : bool = False, ratio_list : list = None):
     global time_list
     global prices_candle_dict
     global close_prices_dict
@@ -142,18 +210,18 @@ def draw_chart(db, user_name, coin_name, title):
                 if k != "_id" and k != "Time":
                     prices_candle_dict[k].append(data[k][0])
                     close_prices_dict[k].append(data[k][0][3])
-        try:
-            if "total" not in coin_name:
-                list_coins = coin_name
-            else:
-                list_coins = ['klay'] + [c for c in kwlps.keys()]
-                # remove_coin_list = ["orca", "vkai", "kdai", "kai", "wood", "kscoinbase", "ksdunamu", "ksyanolja"]
-                for coin_name in except_list:
-                    list_coins.remove(coin_name)
-            
-            price_data_str = total_chart(time_list, prices_candle_dict, user_name, list_coins, title)
-        except:
-            return False, f"에러 발생..."
+        # try:
+        if "total" not in coin_name:
+            list_coins = coin_name
+        else:
+            list_coins = ['klay'] + [c for c in kwlps.keys()]
+            # remove_coin_list = ["orca", "vkai", "kdai", "kai", "wood", "kscoinbase", "ksdunamu", "ksyanolja"]
+            for coin_name in except_list:
+                list_coins.remove(coin_name)
+        
+        price_data_str = total_chart(time_list, prices_candle_dict, user_name, list_coins, title, ratio_chart, ratio_list)
+        # except:
+        #     return False, f"에러 발생..."
     else:
         return False, f"데이터 수집중..."
     
@@ -263,7 +331,7 @@ def show_aklay_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay"], interval_str, ratio_chart=True, ratio_list=["klay", "aklay"])
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -344,7 +412,7 @@ def show_kfi_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "kfi"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "kfi"], interval_str, ratio_chart=True, ratio_list=["klay", "kfi"])
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -431,9 +499,9 @@ def show_ks_chart(update, ctx):
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
 
-    result_msg = display_price_ratio(result_msg, "ksCOINBASE", "kai")
-    result_msg = display_price_ratio(result_msg, "ksDUNAMU", "kai")
-    result_msg = display_price_ratio(result_msg, "ksYANOLJA", "kai")
+    result_msg = display_price_ratio(result_msg, "kscoinbase", "kai")
+    result_msg = display_price_ratio(result_msg, "ksdunamu", "kai")
+    result_msg = display_price_ratio(result_msg, "ksyanolja", "kai")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
