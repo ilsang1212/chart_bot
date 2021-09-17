@@ -9,6 +9,7 @@ from matplotlib.ticker import ScalarFormatter
 import datetime, re
 from pymongo import MongoClient
 import pymongo, ssl
+import requests
 
 token = os.environ["BOT_TOKEN"]
 token_name_list : list = os.environ["TOKEN_NAME"].split(" ")
@@ -17,6 +18,8 @@ max_length : int = int(os.environ["MAX_LENGTH"])
 chat_id_list : list = os.environ["CHAT_ID_LIST"].split(" ")
 fig_scale : int = int(os.environ["FIG_SCALE"])
 except_list : list = os.environ["EXCEPT_LIST"].split(" ")
+ks_asset_name_list : list = os.environ["KS_ASSET_NAME_LIST"].split(" ")
+ks_asset_url_list : list = os.environ["KS_ASSET_URL_LIST"].split(" ")
 
 mongoDB_connect_info : dict = {
     "host" : os.environ["mongoDB_HOST"],
@@ -27,6 +30,7 @@ mongoDB_connect_info : dict = {
 price_db = None
 kwlps : dict = {}
 time_list : list = []
+ks_asset_url_dict : dict = {}
 close_prices_dict : dict = {"klay":[]}
 prices_candle_dict : dict = {"klay":[]}
 candle_time_db_dict : dict = {"5":None, "15":None, "1":None, "4":None, "d":None}
@@ -37,6 +41,9 @@ for i, name in enumerate(token_name_list):
 for k in kwlps.keys():
     close_prices_dict[k] = []
     prices_candle_dict[k] = []
+
+for i in range(len(ks_asset_name_list)):
+    ks_asset_url_dict[ks_asset_name_list[i]] = ks_asset_url_list[i]
 
 config_plot = dict( ## 키워드 인자
     color='#7CFC00', # 선 색깔
@@ -50,6 +57,18 @@ bbox = dict( ## 텍스트 박스 스타일 지정
     boxstyle='square', # 박스 모양
     facecolor='white', # 박스 배경색
 )
+
+def load_ks_json(url):
+    result : dict = {}
+    try:
+        for key, value in ks_asset_url_dict.items():
+            r = requests.get(value).json()
+            result[key] = r[len(r)-1]
+        return True, result
+    except Exception as e:
+        print(f"{datetime.datetime.now().strftime('%m/%d %H:%M')} : {e}")
+        return False, {}
+
 def draw_ratio_chart(ax, prices, data_time, ratio_list:list):
     c_val = prices[ratio_list[0]]
     c_val1 = prices[ratio_list[1]]
@@ -113,6 +132,10 @@ def draw_ratio_chart(ax, prices, data_time, ratio_list:list):
     return ax
 
 def total_chart(time, prices, user_name, list_coins, title, ratio_chart : bool = False, ratio_list : list = None):
+    checker = False
+    if "kscoinbase" in list_coins:
+        checker, ks_price_data_dict = load_ks_json(ks_asset_url_dict)        
+
     result_str : str = ""
     if ratio_chart and ratio_list is not None:
         n_rows = len(list_coins) + 1
@@ -159,7 +182,17 @@ def total_chart(time, prices, user_name, list_coins, title, ratio_chart : bool =
 
         yticks = list(ax2.get_yticks()) ## y축 눈금을 가져온다.
         xticks = list(ax2.get_xticks()) ## x축 눈금을 가져온다.
-        result_str += f"{cid.upper()} : ${ohlc[len(ohlc)-1][3]}\n"
+        coint_premium : str = ""
+
+        if checker and cid in ks_asset_url_dict.keys():
+            oracle_price = round(float(ks_price_data_dict[cid]["oraclePrice"]), 3)
+            cal_premium = round((float(ohlc[len(ohlc)-1][3])/oracle_price-1)*100, 3)
+            if cal_premium >= 0:
+                coint_premium = f"\n- oracle : ${oracle_price} (+{cal_premium}%)"
+            else:
+                coint_premium = f"\n- oracle : ${oracle_price} ({cal_premium}%)"
+
+        result_str += f"{cid.upper()} : ${ohlc[len(ohlc)-1][3]} {coint_premium}\n"
 
         for y in yticks:
             ax2.axhline(y,linestyle=(0,(5,2)),color='grey',alpha=0.5) ## 눈금선 생성
@@ -499,9 +532,9 @@ def show_ks_chart(update, ctx):
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
 
-    result_msg = display_price_ratio(result_msg, "kscoinbase", "kai")
-    result_msg = display_price_ratio(result_msg, "ksdunamu", "kai")
-    result_msg = display_price_ratio(result_msg, "ksyanolja", "kai")
+    result_msg = display_price_ratio(result_msg, "ksCOINBASE", "kai")
+    result_msg = display_price_ratio(result_msg, "ksDUNAMU", "kai")
+    result_msg = display_price_ratio(result_msg, "ksYANOLJA", "kai")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
@@ -511,6 +544,10 @@ def show_ks_chart(update, ctx):
 def spon_link(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text="1클파이도 감사히 받습니다!\n받은 후원금은 서버 운영비 및 개발자 치킨 사먹는데 쓰입니다.")  
     ctx.bot.send_message(chat_id=update.message.chat_id, text="0x5657CeC0a50089Ac4cb698c71319DC56ab5C866a")    
+
+def test(update, ctx):
+    checker, ks_price_data_dict = load_ks_json(ks_asset_url_dict)
+    pass
 
 def main():
     global price_db
@@ -545,6 +582,7 @@ def main():
     dp.add_handler(CommandHandler(["o", "O", "orca", "Orca", "ORCA"], show_orca_chart))
     dp.add_handler(CommandHandler(["ks", "KS", "Ks", "kS"], show_ks_chart))
     dp.add_handler(CommandHandler(["spon", "sp"], spon_link))
+    dp.add_handler(CommandHandler(["test"], test))
     # dp.add_handler(MessageHandler(Filters.command, unknown))
 
     updater.start_polling()
