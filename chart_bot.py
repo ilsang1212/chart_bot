@@ -72,13 +72,13 @@ def draw_ratio_chart(ax, prices, data_time, ratio_list:list):
     
     dohlc[len(dohlc)-1][4]
 
-    ratio_list : list = []
+    ratio_data_list : list = []
 
     for j in range(len(dohlc)):
-        ratio_list.append(round(dohlc[j][4]/dohlc1[j][4],5))
+        ratio_data_list.append(round(dohlc[j][4]/dohlc1[j][4],5))
 
-    max_value = max(ratio_list)
-    min_value = min(ratio_list)
+    max_value = max(ratio_data_list)
+    min_value = min(ratio_data_list)
     
     config_plot1 = dict( ## 키워드 인자
     color='#0000ff', # 선 색깔
@@ -88,7 +88,7 @@ def draw_ratio_chart(ax, prices, data_time, ratio_list:list):
     # markersize=5 # 마커 사이즈
     )
 
-    ax.plot(ratio_list, **config_plot1)
+    ax.plot(ratio_data_list, **config_plot1)
 
     yticks = list(ax.get_yticks()) ## y축 눈금을 가져온다.
     xticks = list(ax.get_xticks()) ## x축 눈금을 가져온다.
