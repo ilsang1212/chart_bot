@@ -545,10 +545,6 @@ def spon_link(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text="1클파이도 감사히 받습니다!\n받은 후원금은 서버 운영비 및 개발자 치킨 사먹는데 쓰입니다.")  
     ctx.bot.send_message(chat_id=update.message.chat_id, text="0x5657CeC0a50089Ac4cb698c71319DC56ab5C866a")    
 
-def test(update, ctx):
-    checker, ks_price_data_dict = load_ks_json(ks_asset_url_dict)
-    pass
-
 def main():
     global price_db
     global time_list
@@ -582,7 +578,6 @@ def main():
     dp.add_handler(CommandHandler(["o", "O", "orca", "Orca", "ORCA"], show_orca_chart))
     dp.add_handler(CommandHandler(["ks", "KS", "Ks", "kS"], show_ks_chart))
     dp.add_handler(CommandHandler(["spon", "sp"], spon_link))
-    dp.add_handler(CommandHandler(["test"], test))
     # dp.add_handler(MessageHandler(Filters.command, unknown))
 
     updater.start_polling()
