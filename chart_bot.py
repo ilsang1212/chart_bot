@@ -344,6 +344,11 @@ def show_klay_chart(update, ctx):
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
+    
+    result_msg = display_price_ratio(result_msg, "Klay", "aKlay")
+    result_msg = display_price_ratio(result_msg, "ksp", "Klay")
+    result_msg = display_price_ratio(result_msg, "Klay", "korc")
+    result_msg = display_price_ratio(result_msg, "Klay", "kbelt")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
