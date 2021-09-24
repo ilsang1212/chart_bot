@@ -530,16 +530,17 @@ def show_ks_chart(update, ctx):
 
     if not db_checker:
         return
+    
+    ks_list = ks_asset_name_list + ["kai"]
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["kscoinbase", "ksdunamu", "ksyanolja", "kai"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ks_list, interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
-
-    result_msg = display_price_ratio(result_msg, "ksCOINBASE", "kai")
-    result_msg = display_price_ratio(result_msg, "ksDUNAMU", "kai")
-    result_msg = display_price_ratio(result_msg, "ksYANOLJA", "kai")
+    
+    for ks_name in ks_asset_name_list:
+        result_msg = display_price_ratio(result_msg, ks_name, "kai")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
