@@ -248,7 +248,6 @@ def draw_chart(db, user_name, coin_name, title, ratio_chart : bool = False, rati
             list_coins = coin_name
         else:
             list_coins = ['klay'] + [c for c in kwlps.keys()]
-            # remove_coin_list = ["orca", "vkai", "kdai", "kai", "wood", "kscoinbase", "ksdunamu", "ksyanolja"]
             for coin_name in except_list:
                 list_coins.remove(coin_name)
         
