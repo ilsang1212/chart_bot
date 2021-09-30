@@ -89,8 +89,6 @@ def draw_ratio_chart(ax, prices, data_time, ratio_list:list):
     dohlc = np.hstack((np.reshape(x, (-1, 1)), ohlc))
     dohlc1 = np.hstack((np.reshape(x, (-1, 1)), ohlc1))
     
-    dohlc[len(dohlc)-1][4]
-
     ratio_data_list : list = []
 
     for j in range(len(dohlc)):
@@ -115,7 +113,7 @@ def draw_ratio_chart(ax, prices, data_time, ratio_list:list):
     for y in yticks:
         ax.axhline(y,linestyle=(0,(5,2)),color='grey',alpha=0.5) ## 눈금선 생성
 
-    ax.text(xticks[len(xticks)-2], yticks[len(yticks)-1],f'{ratio_list[len(ratio_list)-1]}',fontsize=20, ha='center', bbox=bbox) ## 선 그래프 텍스트
+    ax.text(xticks[len(xticks)-2], yticks[len(yticks)-1],f'{ratio_data_list[len(ratio_data_list)-1]}',fontsize=20, ha='center', bbox=bbox) ## 선 그래프 텍스트
     ax.text(0, yticks[len(yticks)-1],f'H : {max_value}\nL : {min_value}',fontsize=18, ha='left', bbox=bbox) ## 선 그래프 텍스트
 
     for time_j in range(len(result_data_time)):
