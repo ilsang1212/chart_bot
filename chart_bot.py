@@ -590,8 +590,10 @@ def show_wm_chart(update, ctx):
     return
 
 def spon_link(update, ctx):
-    ctx.bot.send_message(chat_id=update.message.chat_id, text="1클파이도 감사히 받습니다!\n받은 후원금은 서버 운영비 및 개발자 치킨 사먹는데 쓰입니다.")  
-    ctx.bot.send_message(chat_id=update.message.chat_id, text="0x5657CeC0a50089Ac4cb698c71319DC56ab5C866a")    
+    ctx.bot.send_message(chat_id=update.message.chat_id, text="1클파이도 감사히 받습니다!\n받은 후원금은 서버 운영비 및 개발자 치킨 사먹는데 쓰입니다.\nTo the Moon!")
+    ctx.bot.send_message(chat_id=update.message.chat_id, text="0x33d536f24523135D788AFeE67C8bd694c51D9283")
+    ctx.bot.send_message(chat_id=update.message.chat_id, text="방장!")
+    ctx.bot.send_message(chat_id=update.message.chat_id, text="0x5657CeC0a50089Ac4cb698c71319DC56ab5C866a")
 
 def main():
     global price_db
