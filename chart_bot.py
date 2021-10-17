@@ -616,6 +616,33 @@ def show_jun_chart(update, ctx):
 
     return
 
+def show_mix_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
+    db_checker : bool = True
+    data_checker : bool = True
+    result_msg : str = ""
+    interval_str : str = ""
+
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "mix"], interval_str)
+
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+
+    result_msg = display_price_ratio(result_msg, "Klay", "Mix")
+
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
+    return
+
 def spon_link(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text="1클파이도 감사히 받습니다!\n받은 후원금은 서버 운영비 및 개발자 치킨 사먹는데 쓰입니다.\n")
     ctx.bot.send_message(chat_id=update.message.chat_id, text="To the Moon! 후원주소\nhttps://tothem.pro")
@@ -659,6 +686,7 @@ def main():
     dp.add_handler(CommandHandler(["j", "J", "jun", "Jun", "JUN"], show_jun_chart))
     dp.add_handler(CommandHandler(["b", "B"], show_bw_chart))
     dp.add_handler(CommandHandler(["w", "W"], show_wm_chart))
+    dp.add_handler(CommandHandler(["m", "M", "mix", "MIX"], show_mix_chart))
     dp.add_handler(CommandHandler(["spon", "sp"], spon_link))
     dp.add_handler(CommandHandler(["test"], test))
     # dp.add_handler(MessageHandler(Filters.command, unknown))
