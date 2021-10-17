@@ -296,7 +296,7 @@ def display_price_ratio(msg : str, a_token_name, b_token_name):
         price_ratio = round(float(price_dict[a_token_name])/float(price_dict[b_token_name]), 5)
         result = f"{msg}\n1 {a_token_name} ≈ {price_ratio} {b_token_name}"
     except ZeroDivisionError:
-        price_ratio = round(float(price_dict[a_token_name])/float(price_dict[b_token_name]), 5)
+        price_ratio = 0.00
         result = f"{msg}\n{b_token_name}의 가격은 \"$0.00\"입니다."
    
     return result
