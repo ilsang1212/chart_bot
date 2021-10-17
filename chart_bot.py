@@ -296,7 +296,7 @@ def display_price_ratio(msg : str, a_token_name, b_token_name):
         price_ratio = round(float(price_dict[a_token_name])/float(price_dict[b_token_name]), 5)
         result = f"{msg}\n1 {a_token_name} ≈ {price_ratio} {b_token_name}"
     except ZeroDivisionError:
-        price_ratio = 0.00
+        price_ratio = 0.0
         result = f"{msg}\n{b_token_name}의 가격은 \"$0.00\"입니다."
    
     return result
@@ -508,7 +508,7 @@ def show_orca_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "orca"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["orca"], interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -647,6 +647,32 @@ def show_mix_chart(update, ctx):
 
     return
 
+def help(update, ctx):
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=("실시간 차트확인\n"
+"http://tothem.pro/\n\n"
+"[명령어] - /c, /chart 다가능"
+"/c  : klay, aklay, skai, kfi, house, orca\n"
+"      - 로딩시간 좀 걸림\n"
+"/k : klay, aklay, ksp, korc, kbelt 차트\n"
+"/a : klay, aklay 차트\n"
+"/p : klay, ksp 차트\n"
+"/s : skai, vkai, kai 차트\n"
+"/f : klay, kfi 차트\n"
+"/h : klay, aklay, house, wood, kokoa, ksd 차트\n"
+"/o : orca 차트\n"
+"/ks : 카이프로토콜 합성자산\n"
+"      - 로딩시간 좀 걸림\n"
+"/j : juns, jun 차트\n"
+"/b : klay, sbwpm, clam 차트\n"
+"/w : klay, wemix 차트\n"
+"/m : klay, mix 차트\n\n"
+"!! 모든 명령어뒤에 한칸띄고 숫자 m, 15, 1, 4, d를 붙이면(ex:/c 15)각각 1분봉, 15분봉, 1시간봉, 4시간봉 일봉 확인가능(기본값 5분봉)\n"
+"!! 차트 데이터는 오차가 있을수 있으며 실시간으로 값이 반영되지 않을수 있습니다. 참고하시고 사용해주세요!\n\n"
+"후원은 감사히 받습니다.\n"
+"/spon, /sp\n"
+"Tothemoon :\n"
+"0x33d536f24523135D788AFeE67C8bd694c51D9283"))
+
 def spon_link(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text="1클파이도 감사히 받습니다!\n받은 후원금은 서버 운영비 및 개발자 치킨 사먹는데 쓰입니다.\n")
     ctx.bot.send_message(chat_id=update.message.chat_id, text="To the Moon! 후원주소\nhttps://tothem.pro")
@@ -692,6 +718,7 @@ def main():
     dp.add_handler(CommandHandler(["w", "W"], show_wm_chart))
     dp.add_handler(CommandHandler(["m", "M", "mix", "MIX"], show_mix_chart))
     dp.add_handler(CommandHandler(["spon", "sp"], spon_link))
+    dp.add_handler(CommandHandler(["help"], help))
     dp.add_handler(CommandHandler(["test"], test))
     # dp.add_handler(MessageHandler(Filters.command, unknown))
 
