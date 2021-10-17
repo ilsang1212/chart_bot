@@ -292,9 +292,13 @@ def display_price_ratio(msg : str, a_token_name, b_token_name):
             price_dict[a_token_name] = price_value[price_value.find("$")+1:]
         if price_value.find(f"{b_token_name.upper()} : $") != -1 and price_value[0] == b_token_name.upper()[0]:
             price_dict[b_token_name] = price_value[price_value.find("$")+1:]
-    price_ratio = round(float(price_dict[a_token_name])/float(price_dict[b_token_name]), 5)
-
-    result = f"{msg}\n1 {a_token_name} ≈ {price_ratio} {b_token_name}"
+    try:
+        price_ratio = round(float(price_dict[a_token_name])/float(price_dict[b_token_name]), 5)
+        result = f"{msg}\n1 {a_token_name} ≈ {price_ratio} {b_token_name}"
+    except ZeroDivisionError:
+        price_ratio = round(float(price_dict[a_token_name])/float(price_dict[b_token_name]), 5)
+        result = f"{msg}\n{b_token_name}의 가격은 \"$0.00\"입니다."
+   
     return result
 
 def show_chart(update, ctx):
