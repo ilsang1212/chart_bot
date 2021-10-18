@@ -697,7 +697,7 @@ def get_message(update, ctx):
     if update.message.text == "/바코드" or update.message.text == "/밬호드" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"멋진 오빠. 꺄아아아아악!")
     if update.message.text == "/빠끄" :
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"^___^")
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"^____________^")
     if update.message.text == "/쀼루룹ㅂ쀼" or update.message.text == "/쀼루" or update.message.text == "/쀼루룹"  :
         ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'bbu.jpg', 'rb'))
     if update.message.text == "/준게이" :
