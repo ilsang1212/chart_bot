@@ -685,7 +685,7 @@ def get_message(update, ctx):
     if update.message.text == "/이더아우":
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"NFT에 진심인 편. 킹스피 고래.")
     if update.message.text == "/라모"or update.message.text == "/ramo" :
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'ramo.png', 'rb'))
+        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'ramo.jpg', 'rb'))
     if update.message.text == "/룬휘" or update.message.text == "/roonhwi" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"석하이 판 룬휘형 없제?")
     if update.message.text == "/시안" or update.message.text == "/싸이언" or update.message.text == "/cyan" :
