@@ -692,7 +692,7 @@ def get_message(update, ctx):
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"하우스에 진심인 편. 재건축 전문가.")
     if update.message.text == "/로렌콜" or update.message.text == "/로렌형" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"레이븐 프로 채굴러. 밬호드 스승! (굽신굽신)")
-    if update.message.text == "/" or update.message.text == "/수정형":
+    if update.message.text == "/수정" or update.message.text == "/수정형":
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"프로 선동러.")
     if update.message.text == "/바코드" or update.message.text == "/밬호드" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"멋진 오빠. 꺄아아아아악!")
