@@ -684,6 +684,16 @@ def get_message(update, ctx):
         return
     if update.message.text == "/이더아우":
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"NFT에 진심인 편. 킹스피 고래.")
+    if update.message.text == "/라모"or update.message.text == "/ramo" :
+        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'ramo.png', 'rb'))
+    if update.message.text == "/룬휘" or update.message.text == "/roonhwi" :
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"석하이 판 룬휘형 없제?")
+    if update.message.text == "/시안" or update.message.text == "/싸이언" or update.message.text == "/cyan" :
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"하우스에 진심인 편. 재건축 전문가.")
+    if update.message.text == "/로렌콜" or update.message.text == "/로렌형" or update.message.text == "/lorancecall" :
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"레이븐 프로 채굴러. 밬호드 스승! (굽신굽신)")
+    if update.message.text == "/sj" or update.message.text == "/수정형":
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"프로 선동러.")
     
 def test(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text=f"{update.message.chat_id}")
