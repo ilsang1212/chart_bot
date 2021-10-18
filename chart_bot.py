@@ -702,6 +702,10 @@ def get_message(update, ctx):
         ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'bbu.jpg', 'rb'))
     if update.message.text == "/준게이" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"에클 성애자.")
+    if update.message.text == "/코멧" :
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"돈 되는거 다하는 형.")
+    if update.message.text == "/리제이" :
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"조선 관리자 형. (굽신굽신)")
     
 def test(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text=f"{update.message.chat_id}")
