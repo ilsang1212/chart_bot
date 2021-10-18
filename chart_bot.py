@@ -707,11 +707,11 @@ def main():
 
     candle_time_db_dict = {"m":[price_db.coin.price_one, "1m"], "5":[price_db.coin.price_five, "5m"], "15":[price_db.coin.price_fifteen, "15m"], "1":[price_db.coin.price_hour, "1h"], "4":[price_db.coin.price_four_hour, "4h"], "d":[price_db.coin.price_day, "1Day"]}
 
-    updater = Updater(token)
+    updater = Updater(token, use_context=True)
     dp = updater.dispatcher
     print("Bot Started")
     
-    message_handler = MessageHandler(Filters.text, get_message)
+    message_handler = MessageHandler(Filters.text & (~Filters.command), get_message)
 
     dp.add_handler(message_handler)
     dp.add_handler(CommandHandler(["c", "C", "chart", "Chart", "CHART"], show_chart))
