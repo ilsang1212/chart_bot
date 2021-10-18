@@ -678,6 +678,13 @@ def spon_link(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text="To the Moon! 후원주소\nhttps://tothem.pro")
     ctx.bot.send_message(chat_id=update.message.chat_id, text="0x33d536f24523135D788AFeE67C8bd694c51D9283")
     
+def get_message(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
+        return
+    if update.message.text == "/이더아우":
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"NFT에 진심인 편. 킹스피 고래.")
+    
 def test(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text=f"{update.message.chat_id}")
 
@@ -703,7 +710,10 @@ def main():
     updater = Updater(token)
     dp = updater.dispatcher
     print("Bot Started")
+    
+    message_handler = MessageHandler(Filters.text, get_message)
 
+    dp.add_handler(message_handler)
     dp.add_handler(CommandHandler(["c", "C", "chart", "Chart", "CHART"], show_chart))
     dp.add_handler(CommandHandler(["k", "K", "klay", "Klay", "KLAY"], show_klay_chart))
     dp.add_handler(CommandHandler(["a", "A", "aklay", "Aklay", "AKLAY"], show_aklay_chart))
