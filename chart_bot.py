@@ -727,12 +727,17 @@ def get_message(update, ctx):
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"^____________^")
     if update.message.text == "/쀼루룹ㅂ쀼" or update.message.text == "/쀼루" or update.message.text == "/쀼루룹"  :
         ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'bbu.jpg', 'rb'))
-    if update.message.text == "/준게이" :
+    if update.message.text == "/준게이" or update.message.text == "/게이준" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"에클 성애자.")
     if update.message.text == "/헤잇" or update.message.text == "/헤이트"  :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"고점매수 저점매도 전문가. 프로 탈퇴러")
     if update.message.text == "/리제이" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"조선 관리자 형. (굽신굽신)")
+    if update.message.text == "/세모" :
+        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'semo.jpg', 'rb'))
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"구독해라. 알겠냐.\nhttps://www.youtube.com/channel/UCOfnPeZklEOJWll_ajVhglQ")
+    if update.message.text == "/고구마" :
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"자!숙!고!구!마!")
     
 def test(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text=f"{update.message.chat_id}")
