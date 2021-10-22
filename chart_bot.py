@@ -13,7 +13,6 @@ import requests
 
 token = os.environ["BOT_TOKEN"]
 token_name_list : list = os.environ["TOKEN_NAME"].split(" ")
-token_hash_list : list = os.environ["TOKEN_HASH"].split(" ")
 max_length : int = int(os.environ["MAX_LENGTH"])
 chat_id_list : list = os.environ["CHAT_ID_LIST"].split(" ")
 fig_scale : int = int(os.environ["FIG_SCALE"])
@@ -28,17 +27,13 @@ mongoDB_connect_info : dict = {
     }
 
 price_db = None
-kwlps : dict = {}
 time_list : list = []
 ks_asset_url_dict : dict = {}
 close_prices_dict : dict = {"klay":[]}
 prices_candle_dict : dict = {"klay":[]}
 candle_time_db_dict : dict = {"m" : None, "5":None, "15":None, "1":None, "4":None, "d":None}
 
-for i, name in enumerate(token_name_list):
-    kwlps[name] = token_hash_list[i]
-
-for k in kwlps.keys():
+for k in token_name_list:
     close_prices_dict[k] = []
     prices_candle_dict[k] = []
 
@@ -238,14 +233,14 @@ def draw_chart(db, user_name, coin_name, title, ratio_chart : bool = False, rati
         for data in result_documents:
             time_list.append(data["Time"])
             for k in data.keys():
-                if k != "_id" and k != "Time":
+                if k != "_id" and k != "Time" and k in token_name_list:
                     prices_candle_dict[k].append(data[k][0])
                     close_prices_dict[k].append(data[k][0][3])
         # try:
         if "total" not in coin_name:
             list_coins = coin_name
         else:
-            list_coins = ['klay'] + [c for c in kwlps.keys()]
+            list_coins = ['klay'] + [c for c in token_name_list]
             for coin_name in except_list:
                 list_coins.remove(coin_name)
         
