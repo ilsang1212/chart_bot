@@ -233,7 +233,7 @@ def draw_chart(db, user_name, coin_name, title, ratio_chart : bool = False, rati
         for data in result_documents:
             time_list.append(data["Time"])
             for k in data.keys():
-                if k != "_id" and k != "Time" and k in token_name_list:
+                if k != "_id" and k != "Time" and k in ['klay'] + token_name_list:
                     prices_candle_dict[k].append(data[k][0])
                     close_prices_dict[k].append(data[k][0][3])
         # try:
