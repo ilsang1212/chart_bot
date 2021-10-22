@@ -65,10 +65,11 @@ def load_ks_json(url):
         return False, {}
 
 def draw_ratio_chart(ax, prices, data_time, ratio_list:list):
+    ax.clear()
     c_val = prices[ratio_list[0]]
     c_val1 = prices[ratio_list[1]]
 
-    data_number = min(len(data_time), len(c_val))
+    data_number = min(len(data_time), len(c_val), len(c_val1))
     if data_number < max_length:
         result_data_time = data_time[-data_number:]
         result_c_val = c_val[-data_number:]
@@ -131,7 +132,7 @@ def total_chart(time, prices, user_name, list_coins, title, ratio_chart : bool =
 
     result_str : str = ""
     if ratio_chart and ratio_list is not None:
-        n_rows = len(list_coins) + 1
+        n_rows = len(list_coins) + len(ratio_list)
     else:
         n_rows = len(list_coins)
     fig, axes = plt.subplots(n_rows, 1, figsize=(4*fig_scale, n_rows*fig_scale), dpi=150)
@@ -144,11 +145,11 @@ def total_chart(time, prices, user_name, list_coins, title, ratio_chart : bool =
     
     for i, ax in enumerate(axes):
         ax.clear()
-        if ratio_chart and i == len(axes)-1:
-            ax = draw_ratio_chart(ax, prices, data_time, ratio_list)
+        if ratio_chart and i >= len(list_coins):
+            ax = draw_ratio_chart(axes[i], prices, data_time, ratio_list[i-len(list_coins)])
             plt.tight_layout()
             continue
-
+        
         cid = list_coins[i]
         c_val = prices[cid]
 
@@ -235,6 +236,7 @@ def draw_chart(db, user_name, coin_name, title, ratio_chart : bool = False, rati
             for k in data.keys():
                 if k != "_id" and k != "Time" and k in ['klay'] + token_name_list:
                     prices_candle_dict[k].append(data[k][0])
+                    
                     close_prices_dict[k].append(data[k][0][3])
         # try:
         if "total" not in coin_name:
@@ -365,7 +367,7 @@ def show_aklay_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay"], interval_str, ratio_chart=True, ratio_list=["klay", "aklay"])
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "aklay"], interval_str, ratio_chart=True, ratio_list=[["klay", "aklay"]])
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -446,13 +448,16 @@ def show_kfi_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "kfi"], interval_str, ratio_chart=True, ratio_list=["klay", "kfi"])
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "kfi", "ksta], interval_str, ratio_chart=True, ratio_list=[["klay", "kfi"], ["kfi", "ksta"]])
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
 
     result_msg = display_price_ratio(result_msg, "Klay", "Kfi")
+    result_msg = display_price_ratio(result_msg, "Klay", "Ksta")
+    result_msg = display_price_ratio(result_msg, "Kfi", "Ksta")
+                                                               
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
