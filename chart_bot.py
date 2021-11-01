@@ -900,7 +900,7 @@ def main():
     dp.add_handler(CommandHandler(["test"], test))
     # dp.add_handler(MessageHandler(Filters.command, unknown))
 
-    updater.start_polling()
+    updater.start_polling(timeout=1, clean=True)
     updater.idle()
 
 if __name__ == "__main__":
