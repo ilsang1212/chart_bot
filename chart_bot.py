@@ -749,6 +749,31 @@ def show_jabco2_chart(update, ctx):
 
     return
 
+def show_jabco3_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"사용할 수 없습니다.\n엔피스에 오셔서 확인하세요!\n[엔피스 바로가기](https://t.me/Npiece)", parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+        return
+    db_checker : bool = True
+    data_checker : bool = True
+    result_msg : str = ""
+    interval_str : str = ""
+
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["pics"], interval_str)
+
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
+    return
+
 def show_bus_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"사용할 수 없습니다.\n엔피스에 오셔서 확인하세요!\n[엔피스 바로가기](https://t.me/Npiece)", parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
@@ -894,6 +919,7 @@ def main():
     dp.add_handler(CommandHandler(["jc", "JC", "jab", "JAB"], show_jabco_chart))
     dp.add_handler(CommandHandler(["jc1", "JC1", "jab1", "JAB1"], show_jabco1_chart))
     dp.add_handler(CommandHandler(["jc2", "JC2", "jab2", "JAB2"], show_jabco2_chart))
+    dp.add_handler(CommandHandler(["jc3", "JC3", "jab3", "JAB3"], show_jabco3_chart))
     dp.add_handler(CommandHandler(["bus"], show_bus_chart))
     dp.add_handler(CommandHandler(["spon", "sp"], spon_link))
     dp.add_handler(CommandHandler(["help"], help))
