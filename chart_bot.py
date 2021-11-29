@@ -817,7 +817,7 @@ def show_meta_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "meta", "mudol], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "meta", "mudol"], interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -946,7 +946,7 @@ def main():
     dp.add_handler(CommandHandler(["w", "W"], show_wm_chart))
     dp.add_handler(CommandHandler(["m", "M", "mix", "MIX"], show_mix_chart))
     dp.add_handler(CommandHandler(["d", "D", "kdon", "KDON", "don", "DON"], show_don_chart))
-    dp.add_handler(CommandHandler(["me", "ME", "meta", "META", "mu", "MU", "mudol", "MUDOL"], show_don_chart))
+    dp.add_handler(CommandHandler(["me", "ME", "meta", "META", "mu", "MU", "mudol", "MUDOL"], show_meta_chart))
     dp.add_handler(CommandHandler(["jc", "JC", "jab", "JAB"], show_jabco_chart))
     dp.add_handler(CommandHandler(["jc1", "JC1", "jab1", "JAB1"], show_jabco1_chart))
     dp.add_handler(CommandHandler(["jc2", "JC2", "jab2", "JAB2"], show_jabco2_chart))
