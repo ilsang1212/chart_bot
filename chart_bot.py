@@ -763,7 +763,7 @@ def show_jabco3_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["pics", "bora", "krno"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["pics", "bora", "kcyclub"], interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -831,6 +831,33 @@ def show_meta_chart(update, ctx):
 
     return
 
+def show_krno_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"사용할 수 없습니다.\n엔피스에 오셔서 확인하세요!\n[엔피스 바로가기](https://t.me/Npiece)", parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+        return
+    db_checker : bool = True
+    data_checker : bool = True
+    result_msg : str = ""
+    interval_str : str = ""
+
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+    
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "krno"], interval_str)
+
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+    
+    result_msg = display_price_ratio(result_msg, "Klay", "Krno")
+
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
+    return
+
 def help(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text=("실시간 차트확인\n"
 "http://tothem.pro/\n\n"
@@ -852,10 +879,11 @@ def help(update, ctx):
 "/m : klay, mix 차트\n"
 "/d : klay, don 차트\n"
 "/me : klay, meta, mudol 차트\n"
+"/33 : klay, krno 차트\n"
 "/jc : wiken, mnr, isr, redi 차트\n"
 "/jc1 : bbc, krush, kicx, kqbt  차트\n"
 "/jc2 : pib, hibs, khandy, per  차트\n"
-"/jc3 : pics, bora, krno 차트\n"
+"/jc3 : pics, bora, kcyclub 차트\n"
 "/bus : klay, bus 차트\n\n"
 "!! 모든 명령어뒤에 한칸띄고 숫자 m, 15, 1, 4, d를 붙이면(ex:/c 15)각각 1분봉, 15분봉, 1시간봉, 4시간봉 일봉 확인가능(기본값 5분봉)\n"
 "!! 차트 데이터는 오차가 있을수 있으며 실시간으로 값이 반영되지 않을수 있습니다. 참고하시고 사용해주세요!\n\n"
@@ -947,6 +975,7 @@ def main():
     dp.add_handler(CommandHandler(["m", "M", "mix", "MIX"], show_mix_chart))
     dp.add_handler(CommandHandler(["d", "D", "kdon", "KDON", "don", "DON"], show_don_chart))
     dp.add_handler(CommandHandler(["me", "ME", "meta", "META", "mu", "MU", "mudol", "MUDOL"], show_meta_chart))
+    dp.add_handler(CommandHandler(["33"], show_krno_chart))
     dp.add_handler(CommandHandler(["jc", "JC", "jab", "JAB"], show_jabco_chart))
     dp.add_handler(CommandHandler(["jc1", "JC1", "jab1", "JAB1"], show_jabco1_chart))
     dp.add_handler(CommandHandler(["jc2", "JC2", "jab2", "JAB2"], show_jabco2_chart))
