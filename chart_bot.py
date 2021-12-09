@@ -813,11 +813,13 @@ def show_biot_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["kbiot"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["kbiot", "kdotr"], interval_str, ratio_chart=True, ratio_list=[["kbiot", "kdotr"]])
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
+    
+    result_msg = display_price_ratio(result_msg, "kbiot", "kdotr")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
@@ -962,6 +964,8 @@ def help(update, ctx):
 "/jc1 : bbc, krush, kicx, kqbt  차트\n"
 "/jc2 : pib, hibs, khandy, per  차트\n"
 "/jc3 : pics, bora, kcyclub 차트\n"
+"/jc4 : bype 차트\n"
+"/bi : kbiot, kdotr 차트\n"
 "/bus : klay, bus 차트\n\n"
 "!! 모든 명령어뒤에 한칸띄고 숫자 m, 15, 1, 4, d를 붙이면(ex:/c 15)각각 1분봉, 15분봉, 1시간봉, 4시간봉 일봉 확인가능(기본값 5분봉)\n"
 "!! 차트 데이터는 오차가 있을수 있으며 실시간으로 값이 반영되지 않을수 있습니다. 참고하시고 사용해주세요!\n\n"
