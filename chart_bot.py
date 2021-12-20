@@ -924,7 +924,7 @@ def show_cla_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "cla"], interval_str, ratio_chart=True, ratio_list=[["kbiot", "kdotr"]])
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "cla"], interval_str, ratio_chart=True, ratio_list=[["klay", "cla"]])
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
