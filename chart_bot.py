@@ -1123,7 +1123,7 @@ def main():
     dp.add_handler(CommandHandler(["bi", "BI"], show_biot_chart))
     dp.add_handler(CommandHandler(["cl", "CL", "cla", "CLA"], show_cla_chart))
     dp.add_handler(CommandHandler(["bus"], show_bus_chart))
-    dp.add_handler(CommandHandler(["pu", "PU", "punk", "PUNK"], show_punk_price))
+    dp.add_handler(CommandHandler(["pu", "PU", "punk", "PUNK"], show_punk_chart))
     dp.add_handler(CommandHandler(["spon", "sp"], spon_link))
     dp.add_handler(CommandHandler(["help"], help))
     dp.add_handler(CommandHandler(["test"], test))
