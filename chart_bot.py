@@ -788,7 +788,7 @@ def show_jabco4_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["bype"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["bype", "kmts"], interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -964,6 +964,33 @@ def show_mon_chart(update, ctx):
 
     return
 
+def show_punk_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"사용할 수 없습니다.\n엔피스에 오셔서 확인하세요!\n[엔피스 바로가기](https://t.me/Npiece)", parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+        return
+    db_checker : bool = True
+    data_checker : bool = True
+    result_msg : str = ""
+    interval_str : str = ""
+
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "punk"], interval_str)
+
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+
+    result_msg = display_price_ratio(result_msg, "Klay", "Punk")
+        
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
+    return
+
 def help(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text=("실시간 차트확인\n"
 "http://tothem.pro/\n\n"
@@ -991,9 +1018,10 @@ def help(update, ctx):
 "/jc1 : bbc, krush, kicx, kqbt  차트\n"
 "/jc2 : pib, hibs, khandy, per  차트\n"
 "/jc3 : pics, bora, kcyclub 차트\n"
-"/jc4 : bype 차트\n"
+"/jc4 : bype, kmts 차트\n"
 "/bi : kbiot, kdotr 차트\n"
 "/cl : klay, cla 차트\n"
+"/pu : klay, punk 차트\n"
 "/bus : klay, bus 차트\n\n"
 "!! 모든 명령어뒤에 한칸띄고 숫자 m, 15, 1, 4, d를 붙이면(ex:/c 15)각각 1분봉, 15분봉, 1시간봉, 4시간봉 일봉 확인가능(기본값 5분봉)\n"
 "!! 차트 데이터는 오차가 있을수 있으며 실시간으로 값이 반영되지 않을수 있습니다. 참고하시고 사용해주세요!\n\n"
@@ -1095,6 +1123,7 @@ def main():
     dp.add_handler(CommandHandler(["bi", "BI"], show_biot_chart))
     dp.add_handler(CommandHandler(["cl", "CL", "cla", "CLA"], show_cla_chart))
     dp.add_handler(CommandHandler(["bus"], show_bus_chart))
+    dp.add_handler(CommandHandler(["pu", "PU", "punk", "PUNK"], show_punk_price))
     dp.add_handler(CommandHandler(["spon", "sp"], spon_link))
     dp.add_handler(CommandHandler(["help"], help))
     dp.add_handler(CommandHandler(["test"], test))
