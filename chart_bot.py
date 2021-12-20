@@ -1049,20 +1049,14 @@ def get_message(update, ctx):
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"하우스에 진심인 편. 재건축 전문가.")
     if update.message.text == "/로렌콜" or update.message.text == "/로렌형" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"레이븐 프로 채굴러. 밬호드 스승! (굽신굽신)")
-    if update.message.text == "/수정" or update.message.text == "/수정형":
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"프로 선동러.")
     if update.message.text == "/바코드" or update.message.text == "/밬호드" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"멋진 오빠. 꺄아아아아악!")
     if update.message.text == "/빠끄" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"^____________^")
-    if update.message.text == "/쀼루룹ㅂ쀼" or update.message.text == "/쀼루" or update.message.text == "/쀼루룹"  :
-        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'bbu.jpg', 'rb'))
     if update.message.text == "/준게이" or update.message.text == "/게이준" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"에클 성애자.")
-    if update.message.text == "/헤잇" or update.message.text == "/헤이트"  :
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"고점매수 저점매도 전문가. 프로 탈퇴러")
-    if update.message.text == "/리제이" :
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"조선 관리자 형. (굽신굽신)")
+    if update.message.text == "/마오" :
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"KSP 팔지 마라, 알겠냐")
     if update.message.text == "/세모" :
         ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'semo.jpg', 'rb'))
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"구독해라. 알겠냐.\nhttps://www.youtube.com/channel/UCOfnPeZklEOJWll_ajVhglQ")
