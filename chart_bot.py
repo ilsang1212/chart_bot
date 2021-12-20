@@ -1048,7 +1048,7 @@ def get_message(update, ctx):
     if update.message.text == "/시안" or update.message.text == "/싸이언" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"하우스에 진심인 편. 재건축 전문가.")
     if update.message.text == "/꿀복" :
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"나는 어디든지 있다. 알겠냐.")
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"나는 어디든지 있다, 알겠냐")
     if update.message.text == "/바코드" or update.message.text == "/밬호드" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"멋진 오빠. 꺄아아아아악!")
     if update.message.text == "/빠끄" :
@@ -1056,10 +1056,10 @@ def get_message(update, ctx):
     if update.message.text == "/준게이" or update.message.text == "/게이준" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"에클 성애자.")
     if update.message.text == "/마오" :
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"KSP 팔지 마라, 알겠냐.")
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"KSP 팔지 마라, 알겠냐")
     if update.message.text == "/세모" :
         ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'semo.jpg', 'rb'))
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"구독해라. 알겠냐.\nhttps://www.youtube.com/channel/UCOfnPeZklEOJWll_ajVhglQ")
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"구독해라, 알겠냐\nhttps://www.youtube.com/channel/UCOfnPeZklEOJWll_ajVhglQ")
     if update.message.text == "/고구마" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"자!숙!고!구!마!")
     
