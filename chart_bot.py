@@ -1026,6 +1026,7 @@ def help(update, ctx):
 "!! 모든 명령어뒤에 한칸띄고 숫자 m, 15, 1, 4, d를 붙이면(ex:/c 15)각각 1분봉, 15분봉, 1시간봉, 4시간봉 일봉 확인가능(기본값 5분봉)\n"
 "!! 차트 데이터는 오차가 있을수 있으며 실시간으로 값이 반영되지 않을수 있습니다. 참고하시고 사용해주세요!\n\n"
 "후원은 감사히 받습니다.\n"
+"/꿀복\n"
 "/spon, /sp\n"
 "Tothemoon :\n"
 "0x33d536f24523135D788AFeE67C8bd694c51D9283"))
@@ -1066,6 +1067,22 @@ def get_message(update, ctx):
 def test(update, ctx):
     ctx.bot.send_message(chat_id=update.message.chat_id, text=f"{update.message.chat_id}")
 
+def hello_ment(update, ctx):
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=("📢 투더문에 오신 사랑스러운 유저님들\n\n"
+"투더문은 트레이딩뷰, 오피스 모드등 다양한 기능을 제공하고있습니다.n\n"
+"혹시 건의사항이나 문의사항 있으면 우리 투더문 대표 라모, CM이 언제나 들어드립니다!!n\n"
+"개인적으로 궁금한 질문은 라모, 라미 또는 엠버서더들에게 문의 해주시면 빠르게 처리해드립니다.n\n"
+"* 매달 에어드랍, 수다 이벤트 진행중이 오니 많이 애용해주세요!n\n"
+"다들 들어와주셔서 감사합니다!n\n"
+"유저들을 위한 투더문이 되겠습니다.n\n"
+"- 제공 시바, 라미n\n\n"
+"📌 투더문 홈페이지\n"
+"https://tothem.pro\n\n"
+"📌투더문 후원 NFT 오픈씨 링크\n"
+"https://opensea.io/ToTheMOONPenguin\n\n"
+"📌 투더문 구글 플레이 스토어 어플 링크\n"
+"https://play.google.com/store/apps/details?id=com.mino.eazydefi"))
+    
 def main():
     global price_db
     global time_list
@@ -1120,6 +1137,7 @@ def main():
     dp.add_handler(CommandHandler(["pu", "PU", "punk", "PUNK"], show_punk_chart))
     dp.add_handler(CommandHandler(["spon", "sp"], spon_link))
     dp.add_handler(CommandHandler(["help"], help))
+    dp.add_handler(CommandHandler(["call"], hello_ment))
     dp.add_handler(CommandHandler(["test"], test))
     # dp.add_handler(MessageHandler(Filters.command, unknown))
 
