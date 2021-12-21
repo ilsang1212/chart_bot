@@ -1043,16 +1043,16 @@ def get_message(update, ctx):
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"NFT에 진심인 편. 킹스피 고래.")
     if update.message.text == "/라모" :
         ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'ramo.jpg', 'rb'))
-    if update.message.text == "/룬휘" :
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"석하이 판 룬휘형 없제?")
-    if update.message.text == "/시안" or update.message.text == "/싸이언" :
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"하우스에 진심인 편. 재건축 전문가.")
+    if update.message.text == "/농사를짓자" or update.message.text == "/농짓":
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"나도 어디든지 있다, 알겠냐")
+    if update.message.text == "/상우" :
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"고양이 구원자. 천사")
     if update.message.text == "/꿀복" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"나는 어디든지 있다, 알겠냐")
     if update.message.text == "/바코드" or update.message.text == "/밬호드" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"멋진 오빠. 꺄아아아아악!")
-    if update.message.text == "/빠끄" :
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"^____________^")
+    if update.message.text == "/노모" :
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"라모를 좋아하는 사랑꾼. 사랑해")
     if update.message.text == "/준게이" or update.message.text == "/게이준" :
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"에클 성애자.")
     if update.message.text == "/마오" :
