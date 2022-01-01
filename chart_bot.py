@@ -1094,8 +1094,10 @@ def get_message(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text="사용할 수 없습니다.")
         return
-    if update.message.text == "/이더아우":
-        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"NFT에 진심인 편. 킹스피 고래.")
+    if update.message.text == "/라미":
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"귀염뽀짝 사랑둥이")
+    if update.message.text == "/용노" or update.message.text == "/yongno":
+        ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'yongno.jpg', 'rb'))
     if update.message.text == "/라모" :
         ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'ramo.jpg', 'rb'))
     if update.message.text == "/농사를짓자" or update.message.text == "/농짓":
