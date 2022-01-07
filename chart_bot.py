@@ -813,7 +813,7 @@ def show_jabco5_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["kpace"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["kpace", "ksh"], interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
@@ -1072,7 +1072,7 @@ def help(update, ctx):
 "/jc2 : pib, hibs, khandy, per  차트\n"
 "/jc3 : pics, bora, kcyclub 차트\n"
 "/jc4 : bype, kmts, kpax 차트\n"
-"/jc5 : kpace 차트\n"
+"/jc5 : kpace, ksh 차트\n"
 "/bi : kbiot, kdotr 차트\n"
 "/cl : klay, cla 차트\n"
 "/pu : klay, punk 차트\n"
