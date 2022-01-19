@@ -607,7 +607,7 @@ def show_jun_chart(update, ctx):
     if not db_checker:
         return
 
-    data_checker, result_msg = draw_chart(data_db, user_name, ["juns", "jun", "junc"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["juns", "junc", "jun"], interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
