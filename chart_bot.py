@@ -929,7 +929,7 @@ def show_krno_chart(update, ctx):
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
     
-    result_msg = display_price_ratio(result_msg, "Klay", "Krno")
+    result_msg = display_price_ratio(result_msg, "Klay", "Krno", "kredit", "hook")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
@@ -1065,7 +1065,7 @@ def help(update, ctx):
 "/m : klay, mix 차트\n"
 "/d : klay, don 차트\n"
 "/me : klay, meta, mudol 차트\n"
-"/33 : klay, krno 차트\n"
+"/33 : klay, krno, kredit, hook 차트\n"
 "/mo : klay, mon 차트\n"
 "/kl : klay, kleva 차트\n"
 "/jc : wiken, mnr, isr, redi 차트\n"
