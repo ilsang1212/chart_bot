@@ -923,13 +923,14 @@ def show_krno_chart(update, ctx):
     if not db_checker:
         return
     
-    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "krno", "kredit"], interval_str)
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "krno", "kredit", "hook"], interval_str)
 
     if not data_checker:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
         return
     
-    result_msg = display_price_ratio(result_msg, "Klay", "Krno", "kredit", "hook")
+    result_msg = display_price_ratio(result_msg, "Klay", "Krno")
+    result_msg = display_price_ratio(result_msg, "Klay", "Hook")
 
     ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
     ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
