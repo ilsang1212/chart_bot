@@ -991,6 +991,33 @@ def show_mon_chart(update, ctx):
 
     return
 
+def show_salt_chart(update, ctx):
+    if str(update.message.chat_id) not in chat_id_list:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=f"사용할 수 없습니다.\n엔피스에 오셔서 확인하세요!\n[엔피스 바로가기](https://t.me/Npiece)", parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+        return
+    db_checker : bool = True
+    data_checker : bool = True
+    result_msg : str = ""
+    interval_str : str = ""
+
+    db_checker, user_name, data_db, interval_str = input_checker(update.message, candle_time_db_dict)
+
+    if not db_checker:
+        return
+
+    data_checker, result_msg = draw_chart(data_db, user_name, ["klay", "salt"], interval_str)
+
+    if not data_checker:
+        ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+        return
+
+    result_msg = display_price_ratio(result_msg, "Klay", "Salt")
+        
+    ctx.bot.send_message(chat_id=update.message.chat_id, text=result_msg)
+    ctx.bot.send_photo(chat_id=update.message.chat_id, photo=open(f'result_{user_name}.png', 'rb'))
+
+    return
+
 def show_punk_chart(update, ctx):
     if str(update.message.chat_id) not in chat_id_list:
         ctx.bot.send_message(chat_id=update.message.chat_id, text=f"사용할 수 없습니다.\n엔피스에 오셔서 확인하세요!\n[엔피스 바로가기](https://t.me/Npiece)", parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
@@ -1101,7 +1128,8 @@ def help(update, ctx):
 "/jc2 : pib, hibs, khandy, per  차트\n"
 "/jc3 : pics, bora, kcyclub 차트\n"
 "/jc4 : bype, kmts, kpax 차트\n"
-"/jc5 : kpace, ins 차트\n"
+"/jc5 : kpace, ins, com 차트\n"
+"/salt : klay, salt 차트\n"   
 "/bi : kbiot, kdotr 차트\n"
 "/cl : klay, cla 차트\n"
 "/pu : klay, punk 차트\n"
@@ -1220,6 +1248,7 @@ def main():
     dp.add_handler(CommandHandler(["jc4", "JC4", "jab4", "JAB4"], show_jabco4_chart))
     dp.add_handler(CommandHandler(["jc5", "JC5", "jab5", "JAB5"], show_jabco5_chart))
     dp.add_handler(CommandHandler(["bi", "BI"], show_biot_chart))
+    dp.add_handler(CommandHandler(["salt", "SALT"], show_salt_chart))
     dp.add_handler(CommandHandler(["mkc", "MKC", "MK", "mk"], show_mkc_chart))
     dp.add_handler(CommandHandler(["cl", "CL", "cla", "CLA"], show_cla_chart))
     dp.add_handler(CommandHandler(["bus"], show_bus_chart))
